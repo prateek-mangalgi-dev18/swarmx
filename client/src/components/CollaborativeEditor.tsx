@@ -72,14 +72,14 @@ export default function CollaborativeEditor({ docId }: { docId: string }) {
   }
 
   return (
-    <div className="p-10 flex justify-center">
-      <div className="bg-zinc-900 border border-zinc-700 rounded-xl p-6 w-full max-w-3xl text-white">
-        <h2 className="mb-4 text-sm text-gray-400">
-          Document: {docId}
-        </h2>
+  <div className="flex justify-center items-start pt-10">
+    <div className="w-full max-w-3xl bg-zinc-900 border border-zinc-800 rounded-xl p-6">
+      <h2 className="text-sm text-gray-400 mb-4">
+        Document: {docId}
+      </h2>
 
-        <EditorContent editor={editor} />
-      </div>
+      <EditorContent editor={editor} />
     </div>
-  )
+  </div>
+)
 }
