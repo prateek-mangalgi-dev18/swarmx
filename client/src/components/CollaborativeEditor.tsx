@@ -13,12 +13,10 @@ export default function CollaborativeEditor({ docId }: { docId: string }) {
   const [provider, setProvider] = useState<WebsocketProvider | null>(null)
   const [isMounted, setIsMounted] = useState(false)
 
-  // Mount fix (SSR safe)
   useEffect(() => {
     setIsMounted(true)
   }, [])
 
-  // WebSocket setup
   useEffect(() => {
     if (!isMounted) return
 
@@ -33,9 +31,8 @@ export default function CollaborativeEditor({ docId }: { docId: string }) {
     return () => {
       wsProvider.disconnect()
     }
-  }, [docId, isMounted, ydoc])
+  }, [docId, ydoc, isMounted])
 
-  // ✅ ALWAYS PASS VALID CONFIG
   const editor = useEditor({
     extensions: [
       StarterKit.configure({
@@ -62,24 +59,46 @@ export default function CollaborativeEditor({ docId }: { docId: string }) {
     immediatelyRender: false,
   })
 
-  // 🚫 CONTROL RENDERING HERE (NOT CONFIG)
   if (!isMounted || !provider || !editor) {
     return (
       <div className="text-white p-10 text-center">
-        Loading collaborative editor...
+        Loading editor...
       </div>
     )
   }
 
   return (
-  <div className="flex justify-center items-start pt-10">
-    <div className="w-full max-w-3xl bg-zinc-900 border border-zinc-800 rounded-xl p-6">
-      <h2 className="text-sm text-gray-400 mb-4">
-        Document: {docId}
-      </h2>
+  <div className="flex flex-col h-full">
 
-      <EditorContent editor={editor} />
+    {/* Top Bar */}
+    <div className="flex items-center justify-between px-10 py-4 border-b border-zinc-800 bg-[#0f0f0f]">
+      <input
+        className="bg-transparent text-2xl font-semibold outline-none text-white placeholder-zinc-500"
+        placeholder="Untitled Document"
+      />
+
+      {/* Fake users (for now) */}
+      <div className="flex items-center gap-2">
+        <div className="w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center text-xs font-bold">
+            A
+      </div>
+      <div className="w-8 h-8 rounded-full bg-green-500 flex items-center justify-center text-xs font-bold">
+            B
+      </div>
+</div>
     </div>
+
+    {/* Editor Area */}
+    <div className="flex justify-center pt-10 px-6 flex-1 overflow-auto">
+      <div className="w-full max-w-5xl">
+
+        <div className="bg-[#111] border border-zinc-800 rounded-2xl p-10 shadow-xl hover:shadow-2xl transition min-h-[600px]">
+          <EditorContent editor={editor} />
+        </div>
+
+      </div>
+    </div>
+
   </div>
 )
 }
