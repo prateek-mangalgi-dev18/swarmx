@@ -24,7 +24,7 @@ export const saveDocument = async (req: Request, res: Response) => {
   const doc = await Document.findOneAndUpdate(
     { docId: id },
     { content },
-    { upsert: true, new: true }
+    { upsert: true, returnDocument: "after" }
   )
 
   res.json(doc)
