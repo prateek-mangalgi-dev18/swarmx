@@ -1,21 +1,35 @@
-import http from "http"
 import express from "express"
-import { WebSocketServer } from "ws"
+import cors from "cors"
+import { connectDB } from "./config/db"
+import documentRoutes from "./routes/documentRoutes"
 
-const { setupWSConnection } = require("y-websocket/bin/utils")
+connectDB()
 
 const app = express()
 
-const server = http.createServer(app)
+app.use(cors())
+app.use(express.json())
 
-const wss = new WebSocketServer({ server })
+app.use("/api/docs", documentRoutes)
 
-wss.on("connection", (conn, req) => {
-  setupWSConnection(conn, req)
-})
+// import http from "http"
+// import express from "express"
+// import { WebSocketServer } from "ws"
 
-const PORT = 1234
+// const { setupWSConnection } = require("y-websocket/bin/utils")
 
-server.listen(PORT, () => {
-  console.log(`Collaboration server running on ws://localhost:${PORT}`)
-})
+// const app = express()
+
+// const server = http.createServer(app)
+
+// const wss = new WebSocketServer({ server })
+
+// wss.on("connection", (conn, req) => {
+//   setupWSConnection(conn, req)
+// })
+
+// const PORT = 1234
+
+// server.listen(PORT, () => {
+//   console.log(`Collaboration server running on ws://localhost:${PORT}`)
+// })
