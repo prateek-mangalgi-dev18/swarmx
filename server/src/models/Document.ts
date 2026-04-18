@@ -7,10 +7,10 @@ const documentSchema = new mongoose.Schema(
       required: true,
       unique: true,
     },
-    content: {
-      type: String,
-      default: "",
-    },
+      content: {
+        type: Object,
+        default: {},
+    }
   },
   { timestamps: true }
 )

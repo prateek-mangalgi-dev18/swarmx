@@ -75,12 +75,11 @@ export default function CollaborativeEditor({ docId }: { docId: string }) {
 
         const savedContent = res.data.content
 
-        const yText = ydoc.getText("content")
-
-        if (savedContent && yText.toString() === "") {
-          yText.insert(0, savedContent)
-        }
-      } catch (err) {
+      if (savedContent && editor) {
+        editor.commands.setContent(savedContent)
+      }
+    }
+      catch (err) {
         console.error("Error loading document:", err)
       }
     }
@@ -88,13 +87,13 @@ export default function CollaborativeEditor({ docId }: { docId: string }) {
     loadDocument()
   }, [provider, docId, ydoc])
 
-  // 🔥 AUTO SAVE
+  
   useEffect(() => {
     if (!editor) return
 
     const interval = setInterval(async () => {
       try {
-        const content = editor.getText()
+        const content = editor.getJSON()
 
         await axios.post(
           `http://localhost:5000/api/docs/${docId}`,
